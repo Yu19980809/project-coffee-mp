@@ -1,0 +1,15 @@
+@import url('./assets/iconfonts/iconfont.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+page {
+  color: '#361602';
+  font-size: 32rpx;
+  background-color: #f4f4f4;
+}
+
+.wrapper {
+  padding: 0 32rpx 0 32rpx;
+}
