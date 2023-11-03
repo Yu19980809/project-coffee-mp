@@ -119,7 +119,7 @@ const Index = () => {
 
         {/* 月度饮品榜单 */}
         <View className='mt-[32rpx] px-[48rpx] py-[32rpx] bg-white rounded-[32rpx]'>
-          <Text className='mb-[40rpx] font-semibold'>10月好喝榜</Text>
+          <Text className='mb-[40rpx] font-semibold'>11月好喝榜</Text>
 
           <View className='mt-[40rpx]'>
             { top3drinks?.map( ( drink, index ) => (

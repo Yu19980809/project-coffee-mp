@@ -75,7 +75,10 @@ const Order = () => {
   const [orderType, setOrderType] = useState(0) // 订单类型
 
   // 获取订单列表
-  useDidShow(() => fetchAllOrders().then(res => setOrders(res.data)))
+  useDidShow(() => fetchAllOrders()
+    .then(res => setOrders(res.data))
+    .catch(() => setOrders([]))
+  )
 
   // 再来一单
   const handleOneMore = (type, address, shop, commodities) => {

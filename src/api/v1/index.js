@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request from '../../http/request'
 
 // 首页
 export const fetchTop3Drinks = () => request('/commodity/weapp/top3', 'GET', {}, false)

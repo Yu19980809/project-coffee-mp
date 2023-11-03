@@ -233,7 +233,6 @@ const Menu = () => {
         break
       case 'oneMoreOrder':
         const {type: orderType2, address: orderAddress2, commodities: items} = data
-        console.log('commodities', items)
         items.forEach(item => {
           item.checked = true
           addCommodity(item)
@@ -434,7 +433,6 @@ const Menu = () => {
   // 处理购物车详情中的数量加减
   const handleCartReduce = index => {
     const commodity = products[index]
-    console.log('commodity', commodity)
     if (!commodity.checked) return
 
     if (cartCount === 1) {
@@ -447,7 +445,6 @@ const Menu = () => {
 
   const handleCartIncrease = index => {
     const commodity = products[index]
-    console.log('commodity', commodity)
     if (!commodity.checked) return
     increase(commodity)
   }

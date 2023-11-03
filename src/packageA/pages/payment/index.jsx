@@ -2,7 +2,11 @@ import Taro, { useDidShow } from '@tarojs/taro'
 import { useState } from 'react'
 import { View, Text, Image, Radio, Textarea } from '@tarojs/components'
 import useCartStore from '@/store/cartStore'
-import { generateOrder } from '@/api/v1'
+import {
+  generateOrder,
+  fetchDefaultAddress,
+  fetchNearestShop
+} from '@/api/v1'
 import './index.css'
 
 // 自取/外送 切换组件
@@ -74,28 +78,39 @@ const Payment = () => {
     if (!data) return
 
     const {routeType} = data
-    if (routeType === 'menu') {
+    switch (routeType) {
       // 由菜单页跳转而来
-      const {type, address, shop} = data
-      setOrderType(type)
-      setOrderAddress(address)
-      setOrderShop(shop)
-    } else {
+      case 'menu':
+        const {type, address, shop} = data
+        setOrderType(type)
+        setOrderAddress(address)
+        setOrderShop(shop)
+        break
       // 由门店页跳转而来
-      const {shop} = data
-      setOrderShop(shop)
+      case 'reselectShop':
+        const {shop: reselectShop} = data
+        setOrderShop(reselectShop)
+        break
+      // 由地址列表页跳转而来
+      case 'reselectAddress':
+        const {address: reselectAddress} = data
+        setOrderAddress(reselectAddress)
+        break
+      default:
     }
 
     Taro.preload(null)
   })
-  
-  // 切换订单类型（自取/外送）
+
+  // 切换订单类型
   const handleClickOrderType = type => {
     setOrderType(type)
-    Taro.preload({from: 'payment'})
-    type === '自取'
-    ? Taro.navigateTo({url: '/packageA/pages/shop/index'})
-    : Taro.navigateTo({url: '/packageA/pages/address/show/index'})
+    if (type === '自取') {
+      setOrderAddress({})
+    } else {
+      fetchDefaultAddress().then(res => setOrderAddress(res.data))
+    }
+    fetchNearestShop().then(res => setOrderShop(res.data))
   }
 
   // 处理备注内容
@@ -136,14 +151,14 @@ const Payment = () => {
         {/* 自取 */}
         <View
           className={`flex flex-col justify-around items-start ${ orderType === '自取' ? '' : 'hidden' }`}
-          onClick={() => Taro.navigateTo( { url: '/packageA/pages/shop/show/index' } )}
+          onClick={() => Taro.navigateTo( { url: '/packageA/pages/shop/index' } )}
         >
           <View>
-            <Text>鸿达中央广场店</Text>
+            <Text>{orderShop.name}</Text>
             <Text className='ml-[8rpx] iconfont icon-xiangyou1 text-[32rpx]' />
           </View>
 
-          <Text className='mt-[8rpx] text-primary-400 text-[24rpx]'>距您203m</Text>
+          <Text className='mt-[8rpx] text-primary-400 text-[24rpx]'>{orderShop.location}</Text>
         </View>
 
         {/* 外送 */}
